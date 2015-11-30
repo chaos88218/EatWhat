@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="eat_Time">
+        <item>無</item>
+        <item>早午</item>
+        <item>午晚</item>
+        <item>甜點</item>
+        <item>宵夜</item>
+    </string-array>
+
+    <string-array name="eat_Type">
+        <item>無</item>
+        <item>飯</item>
+        <item>面</item>
+        <item>鍋</item>
+        <item>其他</item>
+    </string-array>
+
+    <string-array name="eat_Score">
+        <item>無</item>
+        <item>1星</item>
+        <item>2星</item>
+        <item>3星</item>
+        <item>4星</item>
+        <item>5星</item>
+    </string-array>
+
+    <string-array name="eat_Price">
+        <item>無</item>
+        <item>-100</item>
+        <item>100–200</item>
+        <item>200–300</item>
+        <item>300–400</item>
+        <item>400+</item>
+    </string-array>
+</resources>

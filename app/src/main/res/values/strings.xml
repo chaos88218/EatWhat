@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Eat What?</string>
+    <string name="action_settings">Settings</string>
+    <string name="eat_Time_prompt">時間</string>
+    <string name="eat_Type_prompt">類型</string>
+    <string name="eat_Score_prompt">評價</string>
+    <string name="eat_Price_prompt">價錢</string>
+</resources>
