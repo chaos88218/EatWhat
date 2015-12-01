@@ -45,12 +45,13 @@ public class MainActivity extends AppCompatActivity {
     Spinner eatTime, eatType, eatScore, eatPrice;
 
     FloatingActionButton add;
+    FloatingActionButton update;
     FloatingActionButton delete;
-
     FloatingActionButton exit;
     FloatingActionButton save;
 
     private GoogleApiClient client;
+    private boolean UPDATE_MODE = false;
 
 
     @Override
@@ -81,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
         eatPrice = (Spinner) findViewById(R.id.eat_Price);
 
         add = (FloatingActionButton) findViewById(R.id.add);
+        update = (FloatingActionButton) findViewById(R.id.update);
         delete = (FloatingActionButton) findViewById(R.id.delete);
-
         exit = (FloatingActionButton) findViewById(R.id.exit);
         save = (FloatingActionButton) findViewById(R.id.save);
 
@@ -109,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
                         addContextxt.setText(c.getString(6));
                         critiContextxt.setText(c.getString(7));
 
-                        if (delete.getVisibility() != View.VISIBLE) {
-                            delete.setVisibility(v.VISIBLE);
+                        if (update.getVisibility() != View.VISIBLE) {
+                            update.setVisibility(v.VISIBLE);
                         }
                         if (allResult.getVisibility() != View.VISIBLE) {
                             allResult.setVisibility(v.VISIBLE);
@@ -138,6 +139,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nameEdittxt.setText(nameContextxt.getText().toString());
+                addEdittxt.setText(addContextxt.getText().toString());
+                critiEdittxt.setText(critiContextxt.getText().toString());
+                editMode(v);
+                UPDATE_MODE = true;
+                delete.setVisibility(View.VISIBLE);
+            }
+        });
+
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,9 +158,10 @@ public class MainActivity extends AppCompatActivity {
                 if (count != 0) {
                     Toast.makeText(v.getContext(), "刪除一個餐廳! ", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(v.getContext(), "刪除有誤喔", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "刪除有誤喔! ", Toast.LENGTH_SHORT).show();
                 }
-                delete.setVisibility(v.GONE);
+                delete.setVisibility(View.GONE);
+                viewMode(v);
             }
         });
 
@@ -171,8 +185,23 @@ public class MainActivity extends AppCompatActivity {
                         || eatScore.getSelectedItemPosition() == 0 || eatPrice.getSelectedItemPosition() == 0) {
                     Toast.makeText(v.getContext(), "要選擇餐廳的分類以及評價喔! ", Toast.LENGTH_SHORT).show();
                 } else {
-                    long new_id = db.insert(DATABASE_TABLE, null, cv);
-                    Toast.makeText(v.getContext(), "新增一個餐廳! " + new_id, Toast.LENGTH_SHORT).show();
+                    if (UPDATE_MODE) {
+                        long new_id = db.update(DATABASE_TABLE, cv, "_id = " + currentRestID, null);
+                        if (new_id != 0) {
+                            Toast.makeText(v.getContext(), "編輯一個餐廳! ", Toast.LENGTH_SHORT).show();
+                            UPDATE_MODE = false;
+                            delete.setVisibility(View.GONE);
+                        } else {
+                            Toast.makeText(v.getContext(), "編輯有誤喔! ", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        long new_id = db.insert(DATABASE_TABLE, null, cv);
+                        if (new_id != 0) {
+                            Toast.makeText(v.getContext(), "新增一個餐廳! ", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(v.getContext(), "新增有誤喔! ", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                     viewMode(v);
                 }
             }
@@ -213,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         critiEdittxt.setVisibility(v.VISIBLE);
 
         add.setVisibility(v.GONE);
-        delete.setVisibility(v.GONE);
+        update.setVisibility(v.GONE);
         eatScore.setVisibility(v.VISIBLE);
 
         save.setVisibility(v.VISIBLE);
@@ -236,6 +265,7 @@ public class MainActivity extends AppCompatActivity {
         exit.setVisibility(v.GONE);
         save.setVisibility(v.GONE);
         allResult.setVisibility(v.GONE);
+        delete.setVisibility(View.GONE);
 
         add.setVisibility(v.VISIBLE);
         allResulttxt.setText("");

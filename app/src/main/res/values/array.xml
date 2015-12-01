@@ -11,7 +11,7 @@
     <string-array name="eat_Type">
         <item>無</item>
         <item>飯</item>
-        <item>面</item>
+        <item>麵</item>
         <item>鍋</item>
         <item>其他</item>
     </string-array>
