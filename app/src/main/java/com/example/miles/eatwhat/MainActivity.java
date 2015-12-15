@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private GoogleApiClient client;
     private boolean UPDATE_MODE = false;
+    private String currentResult = "";
 
 
     @Override
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         addContextxt = (TextView) findViewById(R.id.addContext);
         critiContextxt = (TextView) findViewById(R.id.critiContext);
         allResulttxt = (TextView) findViewById(R.id.textAllResualt);
+        allResulttxt.setMovementMethod(new ScrollingMovementMethod());
 
         buttRand = (Button) findViewById(R.id.butRand);
         allResult = (Button) findViewById(R.id.allResult);
@@ -90,14 +93,34 @@ public class MainActivity extends AppCompatActivity {
         buttRand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (eatTime.getSelectedItemPosition() == 0 || eatType.getSelectedItemPosition() == 0 || eatPrice.getSelectedItemPosition() == 0) {
+                if (eatTime.getSelectedItemPosition() == 0 && eatType.getSelectedItemPosition() == 0 && eatPrice.getSelectedItemPosition() == 0) {
                     Toast.makeText(v.getContext(), "要選擇餐廳的分類以及評價喔! ", Toast.LENGTH_SHORT).show();
                 } else {
+                    String queryLogicTime = "";
+                    String queryLogicType = "";
+                    String queryLogicPrice = "";
                     String[] colNames = new String[]{"_id", "time", "type", "star", "price", "name", "address", "criticize"};
 
-                    Cursor c = db.query(DATABASE_TABLE, colNames, "time=? AND type=? AND price=? "
-                            , new String[]{String.valueOf(eatTime.getSelectedItemPosition()), String.valueOf(eatType.getSelectedItemPosition()), String.valueOf(eatPrice.getSelectedItemPosition()),}
-                            , null, null, null);
+                    if (eatTime.getSelectedItemPosition() != 0) {
+                        queryLogicTime = "time=" + eatTime.getSelectedItemPosition();
+                    }
+                    if (eatType.getSelectedItemPosition() != 0) {
+                        queryLogicType = "type=" + eatType.getSelectedItemPosition();
+                        if (eatTime.getSelectedItemPosition() != 0) {
+                            queryLogicType = " AND " + queryLogicType;
+                        }
+                        if (eatPrice.getSelectedItemPosition() != 0) {
+                            queryLogicType =  queryLogicType + " AND ";
+                        }
+                    }
+                    if (eatPrice.getSelectedItemPosition() != 0) {
+                        queryLogicPrice = "price=" + eatPrice.getSelectedItemPosition();
+                    }
+                    currentResult = queryLogicTime + queryLogicType + queryLogicPrice;
+                    Log.e("Query: ", ".."+currentResult+"..");
+
+                    Cursor c = db.query(DATABASE_TABLE, colNames, queryLogicTime + queryLogicType + queryLogicPrice
+                            , null, null, null, null);
 
                     if (c.getCount() == 0) {
                         Toast.makeText(v.getContext(), "沒有符合的餐廳，新增吧!", Toast.LENGTH_SHORT).show();
@@ -212,9 +235,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String[] colNames = new String[]{"_id", "time", "type", "star", "price", "name", "address", "criticize"};
                 String str = "";
-                Cursor c = db.query(DATABASE_TABLE, colNames, "time=? AND type=? AND price=? "
-                        , new String[]{String.valueOf(eatTime.getSelectedItemPosition()), String.valueOf(eatType.getSelectedItemPosition()), String.valueOf(eatPrice.getSelectedItemPosition()),}
-                        , null, null, null);
+                Cursor c = db.query(DATABASE_TABLE, colNames, currentResult
+                        , null, null, null, null);
 
                 str += "\n";
 

@@ -195,6 +195,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxLines = "800"
+                    android:scrollbars = "vertical"
                     android:id="@+id/textAllResualt" />
 
             </LinearLayout>
