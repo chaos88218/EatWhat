@@ -4,54 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#61ff8e38"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.miles.eatwhat.MainActivity"
-    tools:showIn="@layout/activity_main"
-    android:background="#61ff8e38">
+    tools:showIn="@layout/activity_main">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/mainChestLineLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/mainChestLineLayout">
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/SpinnerLineLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:id="@+id/SpinnerLineLayout">
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <Spinner
+                android:id="@+id/eat_Time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/eat_Time"
                 android:layout_weight="0.33"
                 android:entries="@array/eat_Time"
-                android:prompt="@string/eat_Time_prompt"
                 android:focusable="false"
+                android:prompt="@string/eat_Time_prompt"
                 android:spinnerMode="dropdown" />
 
             <Spinner
+                android:id="@+id/eat_Type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/eat_Type"
                 android:layout_weight="0.33"
                 android:entries="@array/eat_Type"
-                android:prompt = "@string/eat_Type_prompt"
+                android:prompt="@string/eat_Type_prompt"
                 android:spinnerMode="dropdown" />
 
             <Spinner
+                android:id="@+id/eat_Price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/eat_Price"
                 android:layout_weight="0.33"
                 android:entries="@array/eat_Price"
                 android:prompt="@string/eat_Price_prompt"
@@ -59,145 +59,142 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/butRand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="吃什麼?!"
-            android:id="@+id/butRand"
             android:layout_gravity="center_horizontal"
-            android:padding="@dimen/activity_horizontal_margin" />
+            android:padding="@dimen/activity_horizontal_margin"
+            android:text="吃什麼?!" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/background"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/background"
-                android:src="@drawable/eatwat"
-                android:alpha="0.5" />
+                android:alpha="0.5"
+                android:src="@drawable/eatwat" />
 
             <LinearLayout
-                android:orientation="vertical"
+                android:id="@+id/resultLineLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:id="@+id/resultLineLayout"
+                android:orientation="vertical"
                 android:padding="@dimen/activity_horizontal_margin">
 
-                <TextView
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/nameTXT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="餐廳名稱 : "
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <TextView
+                        android:id="@+id/nameContext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/nameEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:animateLayoutChanges="true"
+                        android:visibility="gone"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/addTXT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="餐聽位置 : "
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <TextView
+                        android:id="@+id/addContext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+                    <EditText
+                        android:id="@+id/addEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:animateLayoutChanges="true"
+                        android:visibility="gone"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/critizeTXT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="饕客小記 : "
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <EditText
+                        android:id="@+id/critiEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:animateLayoutChanges="true"
+                        android:ems="10"
+                        android:inputType="textMultiLine"
+                        android:visibility="gone"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/critiContext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:text="隨機一家"
-                    android:id="@+id/textView" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="餐廳名稱 : "
-                        android:id="@+id/nameTXT" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                        android:id="@+id/nameContext" />
-
-                    <EditText
-                        android:animateLayoutChanges="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/nameEdit"
-                        android:layout_weight="1"
-                        android:visibility="gone" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="餐聽位置 : "
-                        android:id="@+id/addTXT" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                        android:id="@+id/addContext" />
-
-                    <EditText
-                        android:animateLayoutChanges="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/addEdit"
-                        android:layout_weight="1"
-                        android:visibility="gone" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="饕客小記 : "
-                        android:id="@+id/critizeTXT" />
-
-                    <EditText
-                        android:animateLayoutChanges="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="textMultiLine"
-                        android:ems="10"
-                        android:id="@+id/critiEdit"
-                        android:layout_weight="1"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                        android:id="@+id/critiContext" />
-                </LinearLayout>
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/eat_Score"
-                    android:layout_weight="0.25"
-                    android:entries="@array/eat_Score"
-                    android:prompt="@string/eat_Score_prompt"
-                    android:spinnerMode="dropdown"
-                    android:visibility="gone" />
+                    android:numStars="5"
+                    android:stepSize="0.5"
+                    android:rating="3"
+                    android:isIndicator="false"
+                    android:layout_gravity="center_horizontal" />
 
                 <Button
+                    android:id="@+id/allResult"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="看所有結果"
-                    android:id="@+id/allResult"
                     android:visibility="gone" />
 
                 <TextView
+                    android:id="@+id/textAllResualt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines = "800"
-                    android:scrollbars = "vertical"
-                    android:id="@+id/textAllResualt" />
+                    android:maxLines="800"
+                    android:scrollbars="vertical"
+                    android:maxHeight="500dp" />
 
             </LinearLayout>
         </RelativeLayout>

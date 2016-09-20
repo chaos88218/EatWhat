@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,12 +26,14 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    //database setting
     private static String DATABASE_TABLE = "list";
     private SQLiteDatabase db;
     private MyDBHelper myDBHelper;
     Random random = new Random();
     int currentRestID;
 
+    //views
     EditText nameEdittxt;
     EditText addEdittxt;
     EditText critiEdittxt;
@@ -43,8 +46,12 @@ public class MainActivity extends AppCompatActivity {
     Button buttRand;
     Button allResult;
 
-    Spinner eatTime, eatType, eatScore, eatPrice;
+    Spinner eatTime, eatType, eatPrice;
 
+    RatingBar score;
+    float rating = 3.0f;
+
+    //control floating button
     FloatingActionButton add;
     FloatingActionButton update;
     FloatingActionButton delete;
@@ -66,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e("State", "onCreate");
 
+        //view bindiing
         nameEdittxt = (EditText) findViewById(R.id.nameEdit);
         addEdittxt = (EditText) findViewById(R.id.addEdit);
         critiEdittxt = (EditText) findViewById(R.id.critiEdit);
@@ -81,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
         eatTime = (Spinner) findViewById(R.id.eat_Time);
         eatType = (Spinner) findViewById(R.id.eat_Type);
-        eatScore = (Spinner) findViewById(R.id.eat_Score);
         eatPrice = (Spinner) findViewById(R.id.eat_Price);
 
         add = (FloatingActionButton) findViewById(R.id.add);
@@ -90,12 +97,25 @@ public class MainActivity extends AppCompatActivity {
         exit = (FloatingActionButton) findViewById(R.id.exit);
         save = (FloatingActionButton) findViewById(R.id.save);
 
+        //listener setting
+        score = (RatingBar) findViewById(R.id.ratingBar);
+        score.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                rating = v;
+            }
+        });
+
+        //random a restaurant
         buttRand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //id do not choose any label
                 if (eatTime.getSelectedItemPosition() == 0 && eatType.getSelectedItemPosition() == 0 && eatPrice.getSelectedItemPosition() == 0) {
                     Toast.makeText(v.getContext(), "要選擇餐廳的分類以及評價喔! ", Toast.LENGTH_SHORT).show();
                 } else {
+                    //query logic, any label was chosen would work
                     String queryLogicTime = "";
                     String queryLogicType = "";
                     String queryLogicPrice = "";
@@ -116,6 +136,9 @@ public class MainActivity extends AppCompatActivity {
                     if (eatPrice.getSelectedItemPosition() != 0) {
                         queryLogicPrice = "price=" + eatPrice.getSelectedItemPosition();
                     }
+
+
+                    //give query command and get result
                     currentResult = queryLogicTime + queryLogicType + queryLogicPrice;
                     Log.e("Query: ", ".."+currentResult+"..");
 
@@ -129,15 +152,16 @@ public class MainActivity extends AppCompatActivity {
                         c.moveToPosition(getOneResta);
 
                         currentRestID = Integer.parseInt(c.getString(0));
+                        score.setRating(Float.parseFloat(c.getString(3)));
                         nameContextxt.setText(c.getString(5));
                         addContextxt.setText(c.getString(6));
                         critiContextxt.setText(c.getString(7));
 
                         if (update.getVisibility() != View.VISIBLE) {
-                            update.setVisibility(v.VISIBLE);
+                            update.setVisibility(View.VISIBLE);
                         }
                         if (allResult.getVisibility() != View.VISIBLE) {
-                            allResult.setVisibility(v.VISIBLE);
+                            allResult.setVisibility(View.VISIBLE);
                             allResulttxt.setText("");
                         }
                     }
@@ -195,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
                 cv.put("time", eatTime.getSelectedItemPosition());
                 cv.put("type", eatType.getSelectedItemPosition());
-                cv.put("star", eatScore.getSelectedItemPosition());
+                cv.put("star", rating);
                 cv.put("price", eatPrice.getSelectedItemPosition());
 
                 cv.put("name", nameEdittxt.getText().toString());
@@ -205,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                 if (nameEdittxt.getText().toString().matches("") || addEdittxt.getText().toString().matches("") || critiEdittxt.getText().toString().matches("")) {
                     Toast.makeText(v.getContext(), "要填入餐廳訊息喔! ", Toast.LENGTH_SHORT).show();
                 } else if (eatTime.getSelectedItemPosition() == 0 || eatType.getSelectedItemPosition() == 0
-                        || eatScore.getSelectedItemPosition() == 0 || eatPrice.getSelectedItemPosition() == 0) {
+                        || eatPrice.getSelectedItemPosition() == 0) {
                     Toast.makeText(v.getContext(), "要選擇餐廳的分類以及評價喔! ", Toast.LENGTH_SHORT).show();
                 } else {
                     if (UPDATE_MODE) {
@@ -233,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
         allResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: custom view to list up all queries
                 String[] colNames = new String[]{"_id", "time", "type", "star", "price", "name", "address", "criticize"};
                 String str = "";
                 Cursor c = db.query(DATABASE_TABLE, colNames, currentResult
@@ -250,26 +275,27 @@ public class MainActivity extends AppCompatActivity {
                     c.moveToNext();
                 }
                 allResulttxt.setText(str.toString());
-                allResult.setVisibility(v.GONE);
+                allResult.setVisibility(View.GONE);
             }
         });
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+
+
     public void editMode(View v) {
         buttRand.setClickable(false);
-        nameEdittxt.setVisibility(v.VISIBLE);
-        addEdittxt.setVisibility(v.VISIBLE);
-        critiEdittxt.setVisibility(v.VISIBLE);
+        nameEdittxt.setVisibility(View.VISIBLE);
+        addEdittxt.setVisibility(View.VISIBLE);
+        critiEdittxt.setVisibility(View.VISIBLE);
 
-        add.setVisibility(v.GONE);
-        update.setVisibility(v.GONE);
-        eatScore.setVisibility(v.VISIBLE);
+        add.setVisibility(View.GONE);
+        update.setVisibility(View.GONE);
 
-        save.setVisibility(v.VISIBLE);
-        exit.setVisibility(v.VISIBLE);
-        allResult.setVisibility(v.GONE);
+        save.setVisibility(View.VISIBLE);
+        exit.setVisibility(View.VISIBLE);
+        allResult.setVisibility(View.GONE);
 
         nameContextxt.setText("");
         addContextxt.setText("");
@@ -279,17 +305,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewMode(View v) {
         buttRand.setClickable(true);
-        nameEdittxt.setVisibility(v.GONE);
-        addEdittxt.setVisibility(v.GONE);
-        critiEdittxt.setVisibility(v.GONE);
-        eatScore.setVisibility(v.GONE);
+        nameEdittxt.setVisibility(View.GONE);
+        addEdittxt.setVisibility(View.GONE);
+        critiEdittxt.setVisibility(View.GONE);
 
-        exit.setVisibility(v.GONE);
-        save.setVisibility(v.GONE);
-        allResult.setVisibility(v.GONE);
+        exit.setVisibility(View.GONE);
+        save.setVisibility(View.GONE);
+        allResult.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
 
-        add.setVisibility(v.VISIBLE);
+        add.setVisibility(View.VISIBLE);
         allResulttxt.setText("");
     }
 
